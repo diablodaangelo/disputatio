@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <title>Visual Flowchart &amp; Architecture - Disputatio AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b0f19;
+            color: #f4f4f5;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Subtle grid background */
+        .bg-grid-pattern {
+            background-size: 32px 32px;
+            background-image: 
+                radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+        }
+
+        /* Ambient Glow Animations */
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.08); }
+        }
+        .animate-pulse-glow {
+            animation: pulse-slow 6s ease-in-out infinite;
+        }
+
+        /* Animated Dashed Flow Lines */
+        @keyframes flowDash {
+            to {
+                stroke-dashoffset: -40;
+            }
+        }
+        .flow-line-animated {
+            stroke-dasharray: 6 6;
+            animation: flowDash 1.2s linear infinite;
+        }
+
+        /* Node Hover and Active State Transitions */
+        .flow-node {
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+        }
+        .flow-node:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px var(--node-glow, rgba(99, 102, 241, 0.35));
+        }
+        .flow-node.active-tour {
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 0 0 3px #fff, 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 30px var(--node-glow, #10b981);
+        }
+
+        /* Diamond Decision Shape */
+        .diamond-container {
+            width: 240px;
+            height: 120px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222d56;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #323f74;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#0b0f19] text-[#f4f4f5] antialiased flex flex-col relative overflow-x-hidden selection:bg-white selection:text-black">
+
+    <!-- AMBIENT BACKGROUND GLOWS -->
+    <div class="fixed top-0 left-1/4 w-[600px] h-[600px] bg-indigo-600/20 rounded-full blur-[160px] pointer-events-none -translate-y-1/2 animate-pulse-glow"></div>
+    <div class="fixed bottom-0 right-1/4 w-[600px] h-[600px] bg-violet-600/20 rounded-full blur-[160px] pointer-events-none translate-y-1/3 animate-pulse-glow" style="animation-delay: 3s;"></div>
+
+    <!-- TOP HEADER NAVBAR -->
+    <header class="sticky top-0 z-50 border-b border-[#222d56]/80 bg-[#0b0f19]/85 backdrop-blur-xl px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
+        <!-- Brand Logo -->
+        <div class="flex items-center gap-3">
+            <a href="prototype_html/index.html" class="flex items-center gap-3 group">
+                <div class="size-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white font-extrabold flex items-center justify-center shadow-lg shadow-white/10 group-hover:scale-105 transition-transform">
+                    <i data-lucide="circle-dot" class="size-5 stroke-[2.5] text-black"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-sm tracking-tight text-white">Disputatio</span>
+                        <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                            v2.0 Flow
+                        </span>
+                    </div>
+                    <span class="text-[11px] text-neutral-400 block font-medium">Interactive Workflow &amp; Architecture Map</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Controls Toolbar -->
+        <div class="flex items-center flex-wrap gap-2.5">
+            
+            <!-- View Mode Switcher -->
+            <div class="flex items-center p-1 rounded-xl bg-[#161c36] border border-[#222d56]">
+                <button id="btnModeDisputatio" onclick="switchMode('disputatio')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-white text-black shadow-md">
+                    <i data-lucide="sparkles" class="size-3.5"></i>
+                    <span>Alur Disputatio AI</span>
+                </button>
+                <button id="btnModeReference" onclick="switchMode('reference')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-neutral-400 hover:text-white transition flex items-center gap-1.5">
+                    <i data-lucide="git-fork" class="size-3.5"></i>
+                    <span>Diagram Asli (E-Commerce)</span>
+                </button>
+            </div>
+
+            <!-- Visual Theme Switcher -->
+            <div class="flex items-center p-1 rounded-xl bg-[#161c36] border border-[#222d56]">
+                <button id="btnThemeDark" onclick="switchTheme('dark')" class="px-2.5 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-1.5 bg-[#222d56] text-white">
+                    <span class="size-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Dark Pro</span>
+                </button>
+                <button id="btnThemeClassic" onclick="switchTheme('classic')" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-neutral-400 hover:text-white transition flex items-center gap-1.5">
+                    <span class="size-2 rounded-full bg-[#2185d0]"></span>
+                    <span>Classic Image</span>
+                </button>
+            </div>
+
+            <!-- Tour Simulation Button -->
+            <button id="btnTour" onclick="toggleTour()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 hover:from-emerald-400 hover:to-teal-400 text-black text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20 active:scale-95">
+                <i data-lucide="play" id="tourIcon" class="size-3.5 fill-black"></i>
+                <span id="tourLabel">Mulai Tur Alur (Simulasi)</span>
+            </button>
+
+            <!-- Link to all prototypes -->
+            <a href="prototype_html/index.html" class="px-3 py-1.5 rounded-xl bg-[#161c36] border border-[#222d56] hover:border-neutral-500 text-xs font-semibold text-neutral-300 hover:text-white transition flex items-center gap-1.5">
+                <i data-lucide="layout-grid" class="size-3.5"></i>
+                <span>Semua Halaman</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 max-w-[1400px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Top Status Banner & Info -->
+        <div class="p-5 sm:p-6 rounded-3xl bg-[#11162b]/90 backdrop-blur-md border border-[#222d56] shadow-xl flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative overflow-hidden">
+            <!-- Decorative Accent line -->
+            <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500 via-sky-500 to-amber-500"></div>
+
+            <div class="space-y-1.5 max-w-2xl">
+                <div class="flex items-center gap-2">
+                    <span id="flowBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 text-xs font-mono font-bold">
+                        <i data-lucide="workflow" class="size-3"></i>
+                        Pipeline Riset Ilmiah &amp; User Journey
+                    </span>
+                    <span class="text-[11px] text-neutral-500 font-mono">10 Langkah Terstruktur</span>
+                </div>
+                <h1 id="flowTitle" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                    Diagram Alur Sistem &amp; Siklus Pemrosesan Naskah
+                </h1>
+                <p id="flowSubtitle" class="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                    Visualisasi terpadu arsitektur naskah riset: mulai dari etalase Landing Page, otentikasi login, antrian pembedahan teks AI Gemini, validasi format, hingga sintesis komparatif.
+                </p>
+            </div>
+
+            <!-- Quick Action Stats & Zoom/Reset -->
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-[#161c36] border border-[#222d56] text-xs font-mono">
+                    <div class="flex items-center gap-1.5">
+                        <span class="size-2 rounded-full bg-rose-500 shadow-[0_0_8px_#f43f5e]"></span>
+                        <span class="text-neutral-300">Start</span>
+                    </div>
+                    <span class="text-neutral-600">|</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="size-2 rounded-full bg-sky-500 shadow-[0_0_8px_#0ea5e9]"></span>
+                        <span class="text-neutral-300">Halaman</span>
+                    </div>
+                    <span class="text-neutral-600">|</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="size-2 rounded-full bg-amber-500 shadow-[0_0_8px_#f59e0b]"></span>
+                        <span class="text-neutral-300">AI Engine</span>
+                    </div>
+                    <span class="text-neutral-600">|</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="size-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
+                        <span class="text-neutral-300">Decision</span>
+                    </div>
+                </div>
+
+                <button onclick="resetFlowSelection()" class="p-2.5 rounded-2xl bg-[#161c36] border border-[#222d56] text-neutral-400 hover:text-white hover:border-neutral-500 transition" title="Reset Sorotan">
+                    <i data-lucide="rotate-ccw" class="size-4"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- FLOW CANVAS WRAPPER -->
+        <div class="p-6 sm:p-10 rounded-3xl bg-[#11162b]/80 backdrop-blur-xl border border-[#222d56] shadow-2xl relative overflow-x-auto bg-grid-pattern">
+            
+            <div class="min-w-[1040px] max-w-[1140px] mx-auto relative select-none py-8">
+                
+                <!-- SVG CONNECTOR PIPELINE WITH PARTICLES -->
+                <svg id="flowSvg" class="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 1140 700" preserveAspectRatio="none">
+                    <defs>
+                        <!-- Glow Filters -->
+                        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                        </filter>
+                        
+                        <!-- Arrowhead Blue Marker -->
+                        <marker id="arrowBlue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#38bdf8" />
+                        </marker>
+
+                        <!-- Arrowhead Emerald Marker -->
+                        <marker id="arrowEmerald" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#10b981" />
+                        </marker>
+
+                        <!-- Arrowhead Rose Marker -->
+                        <marker id="arrowRose" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#f43f5e" />
+                        </marker>
+                    </defs>
+
+                    <!-- ================= ROW 1 PATHS ================= -->
+                    <!-- Node 1 -> Node 2 -->
+                    <path id="path1" d="M 190 55 L 305 55" stroke="#38bdf8" stroke-width="2.5" fill="none" marker-end="url(#arrowBlue)" class="flow-line-animated" />
+                    <!-- Node 2 -> Node 3 -->
+                    <path id="path2" d="M 495 55 L 610 55" stroke="#38bdf8" stroke-width="2.5" fill="none" marker-end="url(#arrowBlue)" class="flow-line-animated" />
+                    <!-- Node 3 -> Node 4 -->
+                    <path id="path3" d="M 800 55 L 915 55" stroke="#38bdf8" stroke-width="2.5" fill="none" marker-end="url(#arrowBlue)" class="flow-line-animated" />
+
+                    <!-- ================= CORNER 1: Down to Row 2 ================= -->
+                    <!-- Node 4 -> Node 5 (Vertical Drop) -->
+                    <path id="path4" d="M 1010 100 L 1010 205" stroke="#f59e0b" stroke-width="2.5" fill="none" marker-end="url(#arrowBlue)" class="flow-line-animated" />
+
+                    <!-- ================= ROW 2 PATHS (Right to Left) ================= -->
+                    <!-- Node 5 -> Node 6 -->
+                    <path id="path5" d="M 915 250 L 800 250" stroke="#38bdf8" stroke-width="2.5" fill="none" marker-end="url(#arrowBlue)" class="flow-line-animated" />
+                    <!-- Node 6 -> Node 7 -->
+                    <path id="path6" d="M 610 250 L 495 250" stroke="#38bdf8" stroke-width="2.5" fill="none" marker-end="url(#arrowBlue)" class="flow-line-animated" />
+
+                    <!-- ================= CORNER 2: Down to Decision Diamond ================= -->
+                    <!-- Node 7 -> Node 8 (Vertical Drop to Diamond Top) -->
+                    <path id="path7" d="M 400 295 L 400 375" stroke="#10b981" stroke-width="2.5" fill="none" marker-end="url(#arrowEmerald)" class="flow-line-animated" />
+
+                    <!-- ================= ROW 3: DECISION BRANCHES ================= -->
+                    <!-- YES Branch (Horizontal to Node 9) -->
+                    <path id="pathYes" d="M 520 440 L 760 440" stroke="#10b981" stroke-width="3" fill="none" marker-end="url(#arrowEmerald)" class="flow-line-animated" />
+                    
+                    <!-- YES Label Badge -->
+                    <rect x="620" y="426" width="46" height="26" rx="6" fill="#0b0f19" stroke="#10b981" stroke-width="1.5" />
+                    <text x="643" y="444" fill="#10b981" font-family="JetBrains Mono" font-weight="700" font-size="12" text-anchor="middle">YES</text>
+
+                    <!-- NO Branch (Vertical Down to Node 10) -->
+                    <path id="pathNo" d="M 400 500 L 400 590" stroke="#f43f5e" stroke-width="3" fill="none" marker-end="url(#arrowRose)" class="flow-line-animated" />
+                    
+                    <!-- NO Label Badge -->
+                    <rect x="378" y="530" width="44" height="26" rx="6" fill="#0b0f19" stroke="#f43f5e" stroke-width="1.5" />
+                    <text x="400" y="548" fill="#f43f5e" font-family="JetBrains Mono" font-weight="700" font-size="12" text-anchor="middle">NO</text>
+                </svg>
+
+                <!-- NODES INTERFACE GRID -->
+                <div class="relative z-10 space-y-24">
+                    
+                    <!-- ================= ROW 1 (Left to Right) ================= -->
+                    <div class="grid grid-cols-4 gap-24 items-center">
+                        
+                        <!-- NODE 1: START (Pill Stadium Shape) -->
+                        <div onclick="inspectNode(1)" id="node1" class="flow-node w-48 h-24 rounded-full p-1 bg-gradient-to-r from-rose-500 via-red-500 to-rose-600 shadow-xl shadow-rose-500/20" style="--node-glow: rgba(244, 63, 94, 0.4);">
+                            <div class="w-full h-full rounded-full bg-[#11162b] flex flex-col items-center justify-center p-3 text-center transition-colors">
+                                <div class="flex items-center gap-1.5 mb-1">
+                                    <span class="size-2 rounded-full bg-rose-500 animate-ping"></span>
+                                    <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-rose-400">START NODE</span>
+                                </div>
+                                <span id="node1_title" class="text-xs sm:text-sm font-bold text-white leading-tight">Home Page</span>
+                                <span id="node1_sub" class="text-[10px] text-neutral-400 font-mono mt-0.5">/landing.html</span>
+                            </div>
+                        </div>
+
+                        <!-- NODE 2: AUTH -->
+                        <div onclick="inspectNode(2)" id="node2" class="flow-node w-48 h-24 rounded-2xl p-1 bg-gradient-to-br from-[#222d56] to-[#161c36] border border-[#222d56]" style="--node-glow: rgba(56, 189, 248, 0.4);">
+                            <div class="w-full h-full rounded-xl bg-[#11162b] flex flex-col items-center justify-center p-3 text-center">
+                                <div class="flex items-center gap-1.5 mb-1">
+                                    <i data-lucide="shield-check" class="size-3.5 text-sky-400"></i>
+                                    <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-sky-400">STEP 01</span>
+                                </div>
+                                <span id="node2_title" class="text-xs sm:text-sm font-bold text-white leading-tight">Products Page</span>
+                                <span id="node2_sub" class="text-[10px] text-neutral-400 font-mono mt-0.5">/login &amp; /register</span>
+                            </div>
+                        </div>
+
+                        <!-- NODE 3: DASHBOARD -->
+                        <div onclick="inspectNode(3)" id="node3" class="flow-node w-48 h-24 rounded-2xl p-1 bg-gradient-to-br from-[#222d56] to-[#161c36] border border-[#222d56]" style="--node-glow: rgba(56, 189, 248, 0.4);">
+                            <div class="w-full h-full rounded-xl bg-[#11162b] flex flex-col items-center justify-center p-3 text-center">
+                                <div class="flex items-center gap-1.5 mb-1">
+                                    <i data-lucide="layout-dashboard" class="size-3.5 text-sky-400"></i>
+                                    <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-sky-400">STEP 02</span>
+                                </div>
+                                <span id="node3_title" class="text-xs sm:text-sm font-bold text-white leading-tight">Features Page</span>
+                                <span id="node3_sub" class="text-[10px] text-neutral-400 font-mono mt-0.5">/dashboard.html</span>
+                            </div>
+                        </div>
+
+                        <!-- NODE 4: UPLOAD / REPOSITORY -->
+                        <div onclick="inspectNode(4)" id="node4" class="flow-node w-48 h-24 rounded-2xl p-1 bg-gradient-to-br from-[#222d56] to-[#161c36] border border-[#222d56]" style="--node-glow: rgba(56, 189, 248, 0.4);">
+                            <div class="w-full h-full rounded-xl bg-[#11162b] flex flex-col items-center justify-center p-3 text-center">
+                                <div class="flex items-center gap-1.5 mb-1">
+                                    <i data-lucide="cloud-upload" class="size-3.5 text-sky-400"></i>
+                                    <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-sky-400">STEP 03</span>
+                                </div>
+                                <span id="node4_title" class="text-xs sm:text-sm font-bold text-white leading-tight">Customer Testimonials</span>
+                                <span id="node4_sub" class="text-[10px] text-neutral-400 font-mono mt-0.5">/papers.html</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ================= ROW 2 (Right to Left) ================= -->
+                    <div class="grid grid-cols-4 gap-24 items-center">
+                        
+                        <!-- NODE 7: VERIFIKASI / CHECKOUT -->
+                        <div onclick="inspectNode(7)" id="node7" class="flow-node w-48 h-24 rounded-2xl p-1 bg-gradient-to-br from-[#222d56] to-[#161c36] border border-[#222d56]" style="--node-glow: rgba(56, 189, 248, 0.4);">
+                            <div class="w-full h-full rounded-xl bg-[#11162b] flex flex-col items-center justify-center p-3 text-center">
+                                <div class="flex items-center gap-1.5 mb-1">
+                                    <i data-lucide="file-search" class="size-3.5 text-sky-400"></i>
+                                    <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-sky-400">STEP 06</span>
+                                </div>
+                                <span id="node7_title" class="text-xs sm:text-sm font-bold text-white leading-tight">Purchase Page</span>
+                                <span id="node7_sub" class="text-[10px] text-neutral-400 font-mono mt-0.5">Validasi Dokumen</span>
+                            </div>
+                        </div>
+
+                        <!-- NODE 6: PARSING STRUKTUR -->
+                        <div onclick="inspectNode(6)" id="node6" class="flow-node w-48 h-24 rounded-2xl p-1 bg-gradient-to-br from-[#222d56] to-[#161c36] border border-[#222d56]" style="--node-glow: rgba(56, 189, 248, 0.4);">
+                            <div class="w-full h-full rounded-xl bg-[#11162b] flex flex-col items-center justify-center p-3 text-center">
+                                <div class="flex items-center gap-1.5 mb-1">
+                                    <i data-lucide="layers" class="size-3.5 text-sky-400"></i>
+                                    <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-sky-400">STEP 05</span>
+                                </div>
+                                <span id="node6_title" class="text-xs sm:text-sm font-bold text-white leading-tight">Pricing Page</span>
+                                <span id="node6_sub" class="text-[10px] text-neutral-400 font-mono mt-0.5">Ekstraksi Naskah</span>
+                            </div>
+                        </div>
+
+                        <!-- NODE 5: AI ENGINE / PLANS (Highlight Amber Gold) -->
+                        <div onclick="inspectNode(5)" id="node5" class="flow-node w-48 h-24 rounded-2xl p-1 bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-600 shadow-xl shadow-amber-500/20" style="--node-glow: rgba(245, 158, 11, 0.5);">
+                            <div class="w-full h-full rounded-xl bg-[#11162b] flex flex-col items-center justify-center p-3 text-center">
+                                <div class="flex items-center gap-1.5 mb-1">
+                                    <i data-lucide="sparkles" class="size-3.5 text-amber-400 animate-spin" style="animation-duration: 8s;"></i>
+                                    <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-amber-400">AI ENGINE</span>
+                                </div>
+                                <span id="node5_title" class="text-xs sm:text-sm font-bold text-white leading-tight">Plans Page</span>
+                                <span id="node5_sub" class="text-[10px] text-amber-400/90 font-mono mt-0.5">Gemini 2.5 Flash</span>
+                            </div>
+                        </div>
+
+                        <!-- Empty cell in grid -->
+                        <div></div>
+
+                    </div>
+
+                    <!-- ================= ROW 3 (DECISION & BRANCHES) ================= -->
+                    <div class="pt-4 relative">
+                        <div class="flex items-center gap-52">
+                            
+                            <!-- NODE 8: DECISION DIAMOND (Green Emerald) -->
+                            <div onclick="inspectNode(8)" id="node8" class="flow-node relative w-64 h-32 flex items-center justify-center cursor-pointer ml-20" style="--node-glow: rgba(16, 185, 129, 0.5);">
+                                <!-- Custom SVG Diamond with glowing strokes -->
+                                <svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 260 130">
+                                    <polygon points="130,6 254,65 130,124 6,65" fill="#11162b" stroke="#10b981" stroke-width="2.5" />
+                                </svg>
+                                
+                                <div class="relative z-10 text-center px-6 space-y-1">
+                                    <div class="flex items-center justify-center gap-1">
+                                        <i data-lucide="help-circle" class="size-3.5 text-emerald-400"></i>
+                                        <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-emerald-400">DECISION GATE</span>
+                                    </div>
+                                    <span id="node8_title" class="text-xs font-bold text-white leading-tight block">
+                                        Customer make a purchase?
+                                    </span>
+                                    <span id="node8_sub" class="text-[10px] text-emerald-400/80 font-mono block">Status: Valid</span>
+                                </div>
+                            </div>
+
+                            <!-- NODE 9: YES BRANCH (Workspace / Thank You) -->
+                            <div onclick="inspectNode(9)" id="node9" class="flow-node w-56 h-24 rounded-2xl p-1 bg-gradient-to-br from-emerald-500/60 to-emerald-700/60 border border-emerald-500/40 shadow-xl shadow-emerald-500/10" style="--node-glow: rgba(16, 185, 129, 0.4);">
+                                <div class="w-full h-full rounded-xl bg-[#11162b] flex flex-col items-center justify-center p-3 text-center">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <i data-lucide="check-circle-2" class="size-3.5 text-emerald-400"></i>
+                                        <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-emerald-400">SUKSES (YES)</span>
+                                    </div>
+                                    <span id="node9_title" class="text-xs sm:text-sm font-bold text-white leading-tight">Thank You Page</span>
+                                    <span id="node9_sub" class="text-[10px] text-emerald-400/80 font-mono mt-0.5">/compare &amp; /papers/{id}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- NODE 10: NO BRANCH (Exit Intent / Error Recovery) -->
+                        <div class="mt-20 ml-28">
+                            <div onclick="inspectNode(10)" id="node10" class="flow-node w-56 h-24 rounded-2xl p-1 bg-gradient-to-br from-rose-500/60 to-rose-700/60 border border-rose-500/40 shadow-xl shadow-rose-500/10" style="--node-glow: rgba(244, 63, 94, 0.4);">
+                                <div class="w-full h-full rounded-xl bg-[#11162b] flex flex-col items-center justify-center p-3 text-center">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <i data-lucide="alert-triangle" class="size-3.5 text-rose-400"></i>
+                                        <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-rose-400">GAGAL (NO)</span>
+                                    </div>
+                                    <span id="node10_title" class="text-xs sm:text-sm font-bold text-white leading-tight">Exit intent popup with</span>
+                                    <span id="node10_sub" class="text-[10px] text-rose-400/80 font-mono mt-0.5">Log Audit &amp; Retry</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- INTERACTIVE STEP INSPECTOR PANEL -->
+        <div id="inspectorCard" class="p-6 rounded-3xl bg-[#11162b] border border-[#222d56] shadow-2xl space-y-4 transition-all">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#222d56] pb-4">
+                <div class="flex items-center gap-3">
+                    <span id="inspectBadge" class="px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 font-mono text-xs font-bold">
+                        NODE 01
+                    </span>
+                    <h3 id="inspectTitle" class="text-base sm:text-lg font-bold text-white">
+                        Detail Langkah: Beranda / Home Page
+                    </h3>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-neutral-500 font-mono">Route:</span>
+                    <code id="inspectRoute" class="px-2 py-0.5 rounded-lg bg-[#161c36] border border-[#222d56] text-xs font-mono text-emerald-400">/landing.html</code>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <!-- Col 1 -->
+                <div class="p-4 rounded-2xl bg-[#161c36]/80 border border-[#222d56] space-y-1.5">
+                    <div class="flex items-center gap-1.5 text-neutral-400 font-semibold uppercase tracking-wider text-[10px]">
+                        <i data-lucide="info" class="size-3 text-sky-400"></i>
+                        <span>Fungsi &amp; Tujuan</span>
+                    </div>
+                    <p id="inspectDesc" class="text-neutral-200 leading-relaxed text-xs">
+                        Halaman utama etalase sistem Disputatio AI untuk mengenalkan kapabilitas evaluasi naskah otomatis dan matriks komparasi.
+                    </p>
+                </div>
+
+                <!-- Col 2 -->
+                <div class="p-4 rounded-2xl bg-[#161c36]/80 border border-[#222d56] space-y-1.5">
+                    <div class="flex items-center gap-1.5 text-neutral-400 font-semibold uppercase tracking-wider text-[10px]">
+                        <i data-lucide="user-check" class="size-3 text-emerald-400"></i>
+                        <span>Aksi Pengguna (User Action)</span>
+                    </div>
+                    <p id="inspectAction" class="text-neutral-200 leading-relaxed text-xs">
+                        Melihat demo interaktif, membaca fitur, dan mengklik tombol "Mulai Analisis Riset".
+                    </p>
+                </div>
+
+                <!-- Col 3 -->
+                <div class="p-4 rounded-2xl bg-[#161c36]/80 border border-[#222d56] space-y-2 flex flex-col justify-between">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-1.5 text-neutral-400 font-semibold uppercase tracking-wider text-[10px]">
+                            <i data-lucide="file-code" class="size-3 text-purple-400"></i>
+                            <span>Halaman Terkait</span>
+                        </div>
+                        <p class="text-neutral-400 text-[11px]">Buka prototipe mandiri untuk mencoba tampilan layar ini.</p>
+                    </div>
+
+                    <a id="inspectLink" href="prototype_html/landing.html" class="inline-flex items-center justify-between px-3.5 py-2 rounded-xl bg-white text-black font-bold text-xs hover:bg-neutral-200 transition shadow-sm active:scale-95">
+                        <span>Buka Prototipe Layar</span>
+                        <i data-lucide="arrow-up-right" class="size-3.5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-[#222d56] py-6 px-4 text-center text-xs text-neutral-500 font-mono">
+        <span>© 2026 Disputatio AI Platform • User Experience Flow &amp; Pipeline Engine</span>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+        lucide.createIcons();
+
+        // Data for Disputatio AI Website Flow
+        const disputatioFlow = {
+            badge: "Sistem Alur Pengguna Disputatio AI",
+            title: "Diagram Alur Proses Naskah & Eksplorasi Pengguna",
+            subtitle: "Alur navigasi mulai dari Beranda, Autentikasi, Unggah PDF, Parsing Gemini AI, Validasi, hingga Ruang Analisis.",
+            nodes: {
+                1: {
+                    title: "Beranda / Home Page",
+                    sub: "Pintu Masuk & Hero",
+                    route: "/landing.html",
+                    desc: "Halaman landing presentasi utama, showcase live demo analisis naskah ilmiah, dan call-to-action ke platform.",
+                    action: "Melihat pengantar sistem, fitur unggulan, lalu klik 'Masuk' atau 'Mulai Riset'.",
+                    link: "prototype_html/landing.html"
+                },
+                2: {
+                    title: "Autentikasi (Login / Register)",
+                    sub: "Sesi Masuk Peneliti",
+                    route: "/login & /register",
+                    desc: "Autentikasi akun peneliti, verifikasi kata sandi, remember me, atau pendaftaran akun peneliti baru.",
+                    action: "Mengisi email & kata sandi, lalu diarahkan ke Dashboard utama setelah terverifikasi.",
+                    link: "prototype_html/login.html"
+                },
+                3: {
+                    title: "Dashboard Riset",
+                    sub: "Workspace & 4 Metrik",
+                    route: "/dashboard.html",
+                    desc: "Panel ringkasan aktivitas riset, total makalah, total evaluasi, dan shortcut aksi cepat pengguna.",
+                    action: "Memilih aksi 'Unggah Naskah Baru' atau meninjau daftar makalah terkini.",
+                    link: "prototype_html/dashboard.html"
+                },
+                4: {
+                    title: "Unggah Naskah PDF",
+                    sub: "Manajemen Makalah",
+                    route: "/papers.html",
+                    desc: "Form upload file PDF naskah ilmiah (maksimal 50MB) dengan auto-detect metadata & judul.",
+                    action: "Drag-and-drop berkas PDF dan menekan tombol 'Proses Analisis AI'.",
+                    link: "prototype_html/papers.html"
+                },
+                5: {
+                    title: "Gemini 2.5 AI Engine",
+                    sub: "Worker Queue & Parsing",
+                    route: "/ai-jobs.html",
+                    desc: "Proses antrian latar belakang (Job queue worker) untuk membedah teks PDF secara terstruktur dan ekstraksi bibliografi.",
+                    action: "Sistem memproses PDF menggunakan model Google Gemini 2.5 Flash dalam hitungan detik.",
+                    link: "prototype_html/ai-jobs.html"
+                },
+                6: {
+                    title: "Struktur Dokumen Terbedah",
+                    sub: "Abstrak, Metode & Temuan",
+                    route: "Backend Extraction",
+                    desc: "Hasil ekstraksi komponen naskah: abstrak, metodologi riset, temuan kunci, dan sitasi bibtex.",
+                    action: "Penyusunan format JSON naskah ke basis data terenkripsi.",
+                    link: "prototype_html/papers.html"
+                },
+                7: {
+                    title: "Pemeriksaan Validitas Naskah",
+                    sub: "Integritas Format PDF",
+                    route: "Quality Check Gate",
+                    desc: "Validasi apakah teks terbaca jelas, format akademik terdeteksi, dan tidak ada enkripsi PDF rusak.",
+                    action: "Sistem melakukan evaluasi kelayakan naskah sebelum masuk ke tahap analitik.",
+                    link: "prototype_html/audit-logs.html"
+                },
+                8: {
+                    title: "Ekstraksi Berhasil & Valid?",
+                    sub: "Decision Checkpoint",
+                    route: "Condition: Status Valid",
+                    desc: "Titik percabangan logika: Jika naskah valid (Yes) lanjut ke analisis, jika error/gagal (No) tampilkan modal pemulihan.",
+                    action: "Sistem mengevaluasi boolean status naskah (READY vs FAILED).",
+                    link: "prototype_html/ai-jobs.html"
+                },
+                9: {
+                    title: "Ruang Analisis & Komparasi",
+                    sub: "Q&A AI & Matriks Cosine",
+                    route: "/papers/{id} & /compare",
+                    desc: "Halaman tujuan utama: Tanya-jawab dokumen (Q&A AI), peninjauan mitra bestari, dan matriks perbandingan multi-makalah.",
+                    action: "Peneliti mengeksplorasi insight, mengajukan pertanyaan ke AI, dan mengekspor laporan sintesis.",
+                    link: "prototype_html/compare.html"
+                },
+                10: {
+                    title: "Modal Error & Rekomendasi",
+                    sub: "Log Audit & Re-upload",
+                    route: "/audit-logs & Retry",
+                    desc: "Penanganan kegagalan: memberikan peringatan kesalahan teks (misal PDF hasil scan gambar), log audit, dan opsi unggah ulang.",
+                    action: "Pengguna melihat log error dan mengunggah versi PDF berbasis teks (OCR).",
+                    link: "prototype_html/audit-logs.html"
+                }
+            }
+        };
+
+        // Data for Exact Reference Diagram (E-Commerce / Conversion Flow)
+        const referenceFlow = {
+            badge: "Diagram Sesuai Gambar Referensi",
+            title: "Website E-Commerce & Purchase Funnel Flowchart",
+            subtitle: "Alur konversi pembelian produk digital / SaaS sesuai diagram gambar yang diunggah.",
+            nodes: {
+                1: {
+                    title: "Home Page",
+                    sub: "Pintu Masuk",
+                    route: "/",
+                    desc: "Halaman beranda utama website tempat pengunjung pertama kali mendarat.",
+                    action: "Pengunjung membaca hero headline dan mengklik menu Produk.",
+                    link: "prototype_html/landing.html"
+                },
+                2: {
+                    title: "Products Page",
+                    sub: "Katalog Produk",
+                    route: "/products",
+                    desc: "Halaman etalase produk yang menampilkan berbagai solusi yang ditawarkan.",
+                    action: "Pengunjung meninjau fitur dan spesifikasi produk.",
+                    link: "prototype_html/landing.html"
+                },
+                3: {
+                    title: "Features Page",
+                    sub: "Rincian Fitur",
+                    route: "/features",
+                    desc: "Halaman penjelasan detail fitur unggulan dan kelebihan platform.",
+                    action: "Pengunjung membaca ulasan fitur dan menuju ke ulasan pelanggan.",
+                    link: "prototype_html/landing.html"
+                },
+                4: {
+                    title: "Customer Testimonials",
+                    sub: "Bukti Sosial / Review",
+                    route: "/testimonials",
+                    desc: "Halaman bukti sosial dan testimoni kepuasan pelanggan sebelumnya.",
+                    action: "Membangun kepercayaan pengunjung sebelum memilih paket langganan.",
+                    link: "prototype_html/landing.html"
+                },
+                5: {
+                    title: "Plans Page",
+                    sub: "Pilihan Paket",
+                    route: "/plans",
+                    desc: "Halaman perbandingan paket (Free, Pro, Enterprise) yang tersedia.",
+                    action: "Pengunjung memilih paket yang paling sesuai dengan kebutuhan.",
+                    link: "prototype_html/landing.html"
+                },
+                6: {
+                    title: "Pricing Page",
+                    sub: "Struktur Harga",
+                    route: "/pricing",
+                    desc: "Halaman rincian biaya, diskon tahunan, dan opsi penagihan.",
+                    action: "Pengunjung meninjau harga dan menekan tombol 'Beli Sekarang'.",
+                    link: "prototype_html/landing.html"
+                },
+                7: {
+                    title: "Purchase Page",
+                    sub: "Checkout / Pembayaran",
+                    route: "/purchase",
+                    desc: "Halaman formulir checkout dan metode pembayaran.",
+                    action: "Pengunjung memasukkan informasi pembayaran dan menyelesaikan pesanan.",
+                    link: "prototype_html/landing.html"
+                },
+                8: {
+                    title: "Customer make a purchase?",
+                    sub: "Decision Gate",
+                    route: "Payment Verification",
+                    desc: "Pengecekan apakah transaksi berhasil diselesaikan atau pengunjung ingin membatalkan.",
+                    action: "Verifikasi payment gateway (Sukses -> Yes, Batal/Keluar -> No).",
+                    link: "prototype_html/landing.html"
+                },
+                9: {
+                    title: "Thank You Page",
+                    sub: "Konfirmasi Pesanan",
+                    route: "/thank-you",
+                    desc: "Halaman konfirmasi pembelian sukses beserta tanda terima dan akses produk.",
+                    action: "Pelanggan menerima instruksi dan langsung menggunakan produk.",
+                    link: "prototype_html/dashboard.html"
+                },
+                10: {
+                    title: "Exit intent popup with",
+                    sub: "Diskon / Penawaran Batal",
+                    route: "/exit-offer",
+                    desc: "Popup penyelamat konversi ketika pengunjung berniat menutup tab atau batal membeli.",
+                    action: "Memberikan voucher diskon khusus untuk memicu penyelesaian pembelian.",
+                    link: "prototype_html/landing.html"
+                }
+            }
+        };
+
+        let currentMode = 'disputatio';
+        let currentTheme = 'dark';
+        let tourInterval = null;
+        let currentTourStep = 1;
+
+        function renderFlow(data) {
+            document.getElementById('flowBadge').innerText = data.badge;
+            document.getElementById('flowTitle').innerText = data.title;
+            document.getElementById('flowSubtitle').innerText = data.subtitle;
+
+            for (let i = 1; i <= 10; i++) {
+                const node = data.nodes[i];
+                if (node) {
+                    const titleEl = document.getElementById(`node${i}_title`);
+                    const subEl = document.getElementById(`node${i}_sub`);
+                    if (titleEl) titleEl.innerText = node.title;
+                    if (subEl) subEl.innerText = node.sub;
+                }
+            }
+            inspectNode(1);
+        }
+
+        function switchMode(mode) {
+            stopTour();
+            currentMode = mode;
+            const btnDisp = document.getElementById('btnModeDisputatio');
+            const btnRef = document.getElementById('btnModeReference');
+
+            if (mode === 'disputatio') {
+                btnDisp.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-white text-black shadow-md";
+                btnRef.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-neutral-400 hover:text-white transition flex items-center gap-1.5";
+                renderFlow(disputatioFlow);
+            } else {
+                btnRef.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-white text-black shadow-md";
+                btnDisp.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-neutral-400 hover:text-white transition flex items-center gap-1.5";
+                renderFlow(referenceFlow);
+            }
+            lucide.createIcons();
+        }
+
+        function switchTheme(theme) {
+            currentTheme = theme;
+            const btnClassic = document.getElementById('btnThemeClassic');
+            const btnDark = document.getElementById('btnThemeDark');
+
+            if (theme === 'classic') {
+                btnClassic.className = "px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[#222d56] text-white transition flex items-center gap-1.5";
+                btnDark.className = "px-2.5 py-1.5 rounded-lg text-xs font-medium text-neutral-400 hover:text-white transition flex items-center gap-1.5";
+                
+                // Classic colors matching reference image
+                document.getElementById('node1').className = "flow-node w-48 h-24 rounded-full bg-[#e0483e] flex flex-col items-center justify-center p-3 text-center shadow-lg";
+                for (let i of [2, 3, 4, 6, 7, 9, 10]) {
+                    document.getElementById(`node${i}`).className = "flow-node w-48 h-24 rounded-sm bg-[#2185d0] flex flex-col items-center justify-center p-3 text-center shadow-lg";
+                }
+                document.getElementById('node5').className = "flow-node w-48 h-24 rounded-sm bg-[#f2a925] border-2 border-[#b45309]/50 flex flex-col items-center justify-center p-3 text-center shadow-lg";
+                document.querySelector('#node8 polygon').setAttribute('fill', '#54b76e');
+                document.querySelector('#node8 polygon').setAttribute('stroke', '#3d8f51');
+            } else {
+                btnDark.className = "px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[#222d56] text-white transition flex items-center gap-1.5";
+                btnClassic.className = "px-2.5 py-1.5 rounded-lg text-xs font-medium text-neutral-400 hover:text-white transition flex items-center gap-1.5";
+                
+                // Dark Pro Colors
+                document.getElementById('node1').className = "flow-node w-48 h-24 rounded-full p-1 bg-gradient-to-r from-rose-500 via-red-500 to-rose-600 shadow-xl shadow-rose-500/20";
+                for (let i of [2, 3, 4, 6, 7]) {
+                    document.getElementById(`node${i}`).className = "flow-node w-48 h-24 rounded-2xl p-1 bg-gradient-to-br from-[#222d56] to-[#161c36] border border-[#222d56]";
+                }
+                document.getElementById('node5').className = "flow-node w-48 h-24 rounded-2xl p-1 bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-600 shadow-xl shadow-amber-500/20";
+                document.getElementById('node9').className = "flow-node w-56 h-24 rounded-2xl p-1 bg-gradient-to-br from-emerald-500/60 to-emerald-700/60 border border-emerald-500/40 shadow-xl shadow-emerald-500/10";
+                document.getElementById('node10').className = "flow-node w-56 h-24 rounded-2xl p-1 bg-gradient-to-br from-rose-500/60 to-rose-700/60 border border-rose-500/40 shadow-xl shadow-rose-500/10";
+                document.querySelector('#node8 polygon').setAttribute('fill', '#11162b');
+                document.querySelector('#node8 polygon').setAttribute('stroke', '#10b981');
+            }
+        }
+
+        function inspectNode(id) {
+            const data = currentMode === 'disputatio' ? disputatioFlow.nodes[id] : referenceFlow.nodes[id];
+            if (!data) return;
+
+            document.getElementById('inspectBadge').innerText = `NODE 0${id}`;
+            document.getElementById('inspectTitle').innerText = `Detail Langkah: ${data.title}`;
+            document.getElementById('inspectRoute').innerText = data.route;
+            document.getElementById('inspectDesc').innerText = data.desc;
+            document.getElementById('inspectAction').innerText = data.action;
+            document.getElementById('inspectLink').href = data.link;
+
+            // Highlight selected node
+            for (let i = 1; i <= 10; i++) {
+                const el = document.getElementById(`node${i}`);
+                if (el) {
+                    if (i === id) {
+                        el.classList.add('active-tour');
+                    } else {
+                        el.classList.remove('active-tour');
+                    }
+                }
+            }
+        }
+
+        function resetFlowSelection() {
+            stopTour();
+            inspectNode(1);
+        }
+
+        function toggleTour() {
+            if (tourInterval) {
+                stopTour();
+            } else {
+                startTour();
+            }
+        }
+
+        function startTour() {
+            currentTourStep = 1;
+            document.getElementById('tourLabel').innerText = "Hentikan Tur";
+            document.getElementById('tourIcon').setAttribute('data-lucide', 'square');
+            lucide.createIcons();
+
+            inspectNode(currentTourStep);
+            tourInterval = setInterval(() => {
+                currentTourStep++;
+                if (currentTourStep > 10) {
+                    currentTourStep = 1;
+                }
+                inspectNode(currentTourStep);
+            }, 2200);
+        }
+
+        function stopTour() {
+            if (tourInterval) {
+                clearInterval(tourInterval);
+                tourInterval = null;
+            }
+            document.getElementById('tourLabel').innerText = "Mulai Tur Alur (Simulasi)";
+            document.getElementById('tourIcon').setAttribute('data-lucide', 'play');
+            lucide.createIcons();
+        }
+
+        // Initialize on page load
+        renderFlow(disputatioFlow);
+    </script>
+</body>
+</html>

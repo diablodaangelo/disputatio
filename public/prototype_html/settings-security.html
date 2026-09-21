@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <title>Pengaturan Keamanan - Disputatio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0b0f19; color: #f4f4f5; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0f19; }
+        ::-webkit-scrollbar-thumb { background: #222d56; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #323f74; }
+    </style>
+</head>
+<body class="bg-[#0b0f19] text-[#f4f4f5] antialiased min-h-screen flex selection:bg-white selection:text-black"><!-- FIXED STICKY SIDEBAR -->
+    <aside class="sticky top-0 h-screen w-[260px] shrink-0 border-r border-[#222d56] bg-[#11162b] flex flex-col justify-between z-40 select-none">
+        <div>
+            <!-- Brand Header -->
+            <div class="p-5 border-b border-[#222d56] flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black font-extrabold text-sm shadow-sm">
+                    D
+                </div>
+                <div>
+                    <div class="font-extrabold text-sm tracking-tight text-white flex items-center gap-1.5">
+                        DISPUTATIO
+                    </div>
+                    <div class="text-[10px] font-mono text-neutral-500">Research Engine</div>
+                </div>
+            </div>
+
+            <!-- Nav Links Section -->
+            <div class="p-3 space-y-6 overflow-y-auto max-h-[calc(100vh-140px)]">
+                <!-- Ruang Kerja -->
+                <div>
+                    <div class="px-3 mb-2 text-[10px] font-bold tracking-wider font-mono text-neutral-500 uppercase">
+                        RUANG KERJA
+                    </div>
+                    <div class="space-y-1"><a href="dashboard.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors text-neutral-400 hover:text-white hover:bg-neutral-800/50 font-medium">
+            <i data-lucide="layout-grid" class="w-4 h-4 text-neutral-400"></i>
+            <span>Dashboard</span>
+        </a><a href="papers.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors text-neutral-400 hover:text-white hover:bg-neutral-800/50 font-medium">
+            <i data-lucide="file-text" class="w-4 h-4 text-neutral-400"></i>
+            <span>Manajemen Makalah</span>
+        </a><a href="compare.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors text-neutral-400 hover:text-white hover:bg-neutral-800/50 font-medium">
+            <i data-lucide="git-compare" class="w-4 h-4 text-neutral-400"></i>
+            <span>Komparasi Makalah</span>
+        </a></div></div>
+
+                <!-- Konsol Admin -->
+                <div>
+                    <div class="px-3 mb-2 text-[10px] font-bold tracking-wider font-mono text-neutral-500 uppercase flex items-center justify-between">
+                        <span>KONSOL ADMIN</span>
+                        <span class="bg-[#222d56] text-neutral-400 text-[9px] px-1.5 py-0.5 rounded font-mono">ROOT</span>
+                    </div>
+                    <div class="space-y-1"><a href="ai-jobs.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors text-neutral-400 hover:text-white hover:bg-neutral-800/50 font-medium">
+            <i data-lucide="activity" class="w-4 h-4 text-neutral-400"></i>
+            <span>Monitor Job AI</span>
+        </a><a href="audit-logs.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors text-neutral-400 hover:text-white hover:bg-neutral-800/50 font-medium">
+            <i data-lucide="shield-check" class="w-4 h-4 text-neutral-400"></i>
+            <span>Log Audit</span>
+        </a><a href="users.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors text-neutral-400 hover:text-white hover:bg-neutral-800/50 font-medium">
+            <i data-lucide="users" class="w-4 h-4 text-neutral-400"></i>
+            <span>Manajemen Pengguna</span>
+        </a></div></div>
+            </div>
+        </div>
+
+        <!-- User Profile Pinned Bottom -->
+        <div class="p-3 border-t border-[#222d56] bg-[#11162b]">
+            <a href="settings-profile.html" class="flex items-center justify-between p-2 rounded-lg hover:bg-neutral-800/60 transition-colors group">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-8 h-8 rounded-lg bg-neutral-800 border border-neutral-700 flex items-center justify-center text-xs font-bold text-white shrink-0">
+                        LR
+                    </div>
+                    <div class="min-w-0">
+                        <div class="text-xs font-bold text-white truncate">Lord Resbob</div>
+                        <div class="text-[10px] text-neutral-400 font-mono truncate">sundabaik@desputatio...</div>
+                    </div>
+                </div>
+                <i data-lucide="more-vertical" class="w-4 h-4 text-neutral-500 group-hover:text-white shrink-0"></i>
+            </a>
+        </div>
+    </aside>    <main class="flex-1 min-w-0 p-8 max-w-4xl mx-auto space-y-6">
+        <div class="border-b border-[#222d56] pb-4">
+            <div class="text-xs font-mono text-neutral-500">Pengaturan / Keamanan Akun</div>
+            <h1 class="text-2xl font-bold text-white mt-1">Pengaturan Akun</h1>
+            <p class="text-xs text-neutral-400 mt-1">Kelola informasi profil pribadi dan preferensi keamanan akun riset Anda.</p>
+        </div>
+
+        <!-- 2 Tabs: Profil & Keamanan -->
+        <div class="flex border-b border-[#222d56] gap-2 pb-px">
+            <a href="settings-profile.html" class="px-4 py-2 rounded-lg text-neutral-400 hover:text-white font-medium text-xs">👤 Profil Pengguna</a>
+            <a href="settings-security.html" class="px-4 py-2 rounded-lg bg-white text-black font-bold text-xs">🛡️ Keamanan Akun</a>
+        </div>
+
+        <div class="rounded-2xl bg-[#11162b] border border-[#222d56] p-6 space-y-8">
+            <!-- Form Ganti Password -->
+            <div>
+                <h2 class="font-bold text-base text-white">Perbarui Kata Sandi</h2>
+                <p class="text-xs text-neutral-400 mt-0.5">Masukkan kata sandi saat ini untuk memverifikasi identitas Anda sebelum mengubah ke kata sandi baru.</p>
+
+                <form class="space-y-4 max-w-lg mt-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-neutral-300 mb-1.5">Kata Sandi Saat Ini *</label>
+                        <input type="password" placeholder="Masukkan kata sandi saat ini" class="w-full px-3.5 py-2.5 rounded-xl bg-[#161c36] border border-[#222d56] text-xs text-white focus:outline-none focus:border-white">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-neutral-300 mb-1.5">Kata Sandi Baru *</label>
+                        <input type="password" placeholder="Masukkan kata sandi baru minimal 8 karakter" class="w-full px-3.5 py-2.5 rounded-xl bg-[#161c36] border border-[#222d56] text-xs text-white focus:outline-none focus:border-white">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-neutral-300 mb-1.5">Konfirmasi Kata Sandi Baru *</label>
+                        <input type="password" placeholder="Ulangi kata sandi baru" class="w-full px-3.5 py-2.5 rounded-xl bg-[#161c36] border border-[#222d56] text-xs text-white focus:outline-none focus:border-white">
+                    </div>
+
+                    <button type="button" class="px-5 py-2.5 rounded-xl bg-white text-black font-bold text-xs hover:bg-neutral-200 transition">
+                        Simpan Kata Sandi
+                    </button>
+                </form>
+            </div>
+
+            <!-- 2FA & Passkeys -->
+            <div class="pt-6 border-t border-[#222d56] space-y-4">
+                <h3 class="text-sm font-bold text-white">Otentikasi Dua Faktor (2FA) &amp; Passkeys</h3>
+                
+                <div class="p-4 rounded-xl bg-[#161c36] border border-[#222d56] flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="smartphone" class="w-5 h-5 text-emerald-400"></i>
+                        <div>
+                            <div class="text-xs font-bold text-white">Aplikasi Authenticator (TOTP)</div>
+                            <div class="text-[11px] text-neutral-400">Google Authenticator, 1Password, atau Authy</div>
+                        </div>
+                    </div>
+                    <button class="px-3.5 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-semibold">Aktifkan 2FA</button>
+                </div>
+
+                <div class="p-4 rounded-xl bg-[#161c36] border border-[#222d56] flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="key" class="w-5 h-5 text-sky-400"></i>
+                        <div>
+                            <div class="text-xs font-bold text-white">Kunci Sandi (Passkeys &amp; Windows Hello)</div>
+                            <div class="text-[11px] text-neutral-400">Login biometrik tanpa kata sandi via WebAuthn</div>
+                        </div>
+                    </div>
+                    <button class="px-3.5 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-semibold">+ Tambah Passkey</button>
+                </div>
+            </div>
+        </div>
+    </main>    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

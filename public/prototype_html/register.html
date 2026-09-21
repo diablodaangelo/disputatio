@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <title>Daftar - Disputatio AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; }
+    </style>
+</head>
+<body class="bg-[#0b0f19] text-[#f4f4f5] min-h-screen flex flex-col items-center justify-center p-6 selection:bg-white selection:text-black">
+    <div class="w-full max-w-[400px] space-y-6">
+        <!-- Logo & Header -->
+        <div class="flex flex-col items-center gap-3 text-center">
+            <a href="landing.html" class="inline-flex items-center gap-2.5 hover:opacity-80 transition-opacity">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white font-extrabold shadow-md shadow-indigo-500/20 flex items-center justify-center text-sm">
+                    <i data-lucide="circle-dot" class="w-4 h-4 stroke-[2.5]"></i>
+                </div>
+                <div class="text-left leading-tight">
+                    <span class="font-bold text-sm tracking-tight text-white flex items-center gap-1.5">
+                        Disputatio <span class="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded-full bg-neutral-800 text-neutral-400 border border-[#222d56]">AI</span>
+                    </span>
+                    <span class="text-[10px] text-neutral-400 font-medium block">Analisis Riset Ilmiah</span>
+                </div>
+            </a>
+
+            <div class="space-y-1">
+                <h1 class="text-xl font-bold tracking-tight text-white">Daftar Akun Baru</h1>
+                <p class="text-xs text-neutral-400">Lengkapi data di bawah untuk membuat akun baru.</p>
+            </div>
+        </div>
+
+        <!-- Card Form -->
+        <div class="rounded-2xl border border-[#222d56] bg-[#11162b] p-6 sm:p-7 shadow-xl space-y-4">
+            <form onsubmit="handleRegister(event)" class="space-y-4">
+                <div class="space-y-1.5">
+                    <label for="name" class="text-xs font-medium text-neutral-300">Nama Lengkap</label>
+                    <input
+                        id="name"
+                        type="text"
+                        required
+                        autofocus
+                        placeholder="Nama lengkap Anda"
+                        class="w-full h-10 px-3 rounded-xl bg-[#161c36] border border-[#222d56] text-sm text-white focus:outline-none focus:border-neutral-400 placeholder:text-neutral-500 transition-colors"
+                    />
+                </div>
+
+                <div class="space-y-1.5">
+                    <label for="email" class="text-xs font-medium text-neutral-300">Email</label>
+                    <input
+                        id="email"
+                        type="email"
+                        required
+                        placeholder="nama@email.com"
+                        class="w-full h-10 px-3 rounded-xl bg-[#161c36] border border-[#222d56] text-sm text-white focus:outline-none focus:border-neutral-400 placeholder:text-neutral-500 transition-colors"
+                    />
+                </div>
+
+                <div class="space-y-1.5">
+                    <label for="password" class="text-xs font-medium text-neutral-300">Kata Sandi</label>
+                    <input
+                        id="password"
+                        type="password"
+                        required
+                        placeholder="Minimal 8 karakter"
+                        class="w-full h-10 px-3 rounded-xl bg-[#161c36] border border-[#222d56] text-sm text-white focus:outline-none focus:border-neutral-400 placeholder:text-neutral-500 transition-colors"
+                    />
+                </div>
+
+                <div class="space-y-1.5">
+                    <label for="password_confirmation" class="text-xs font-medium text-neutral-300">Konfirmasi Kata Sandi</label>
+                    <input
+                        id="password_confirmation"
+                        type="password"
+                        required
+                        placeholder="Ulangi kata sandi"
+                        class="w-full h-10 px-3 rounded-xl bg-[#161c36] border border-[#222d56] text-sm text-white focus:outline-none focus:border-neutral-400 placeholder:text-neutral-500 transition-colors"
+                    />
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full h-10 rounded-xl bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-colors shadow-none mt-2 flex items-center justify-center"
+                >
+                    Daftar Akun
+                </button>
+            </form>
+
+            <div class="text-neutral-400 text-center text-xs pt-2">
+                Sudah memiliki akun?
+                <a href="login.html" class="text-white font-medium hover:underline">Masuk</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function handleRegister(e) {
+            e.preventDefault();
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

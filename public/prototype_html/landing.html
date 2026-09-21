@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <title>Disputatio - Platform Analisis &amp; Komparasi Makalah Riset AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .bg-grid {
+            background-size: 32px 32px;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+        }
+        .glow-indigo { box-shadow: 0 0 50px -10px rgba(16, 185, 129, 0.25); }
+        .glow-sky { box-shadow: 0 0 50px -10px rgba(56, 189, 248, 0.25); }
+        .glow-indigo { box-shadow: 0 0 50px -10px rgba(99, 102, 241, 0.25); }
+    </style>
+</head>
+<body class="bg-[#0b0f19] text-[#f4f4f5] antialiased selection:bg-white selection:text-black min-h-screen relative overflow-x-hidden">
+
+    <!-- Ambient Background Glows -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-emerald-500/10 rounded-full blur-[160px] pointer-events-none -translate-y-1/3"></div>
+    <div class="fixed top-1/3 right-0 w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-[160px] pointer-events-none"></div>
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-50 backdrop-blur-xl bg-[#0b0f19]/85 border-b border-[#222d56]/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center gap-2.5 hover:opacity-90 transition">
+                    <div class="size-9 rounded-xl bg-gradient-to-br from-white via-neutral-100 to-neutral-300 text-black font-extrabold flex items-center justify-center shadow-lg shadow-white/10">
+                        <i data-lucide="circle-dot" class="size-5 stroke-[2.5] text-black"></i>
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-sm tracking-tight text-white flex items-center gap-1.5">
+                            Disputatio <span class="text-[9px] font-mono font-bold uppercase px-1.5 py-0.2 rounded-full bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">AI</span>
+                        </span>
+                        <span class="text-[10px] text-neutral-400 font-medium block">Research Intelligence Platform</span>
+                    </div>
+                </a>
+            </div>
+
+            <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-neutral-400">
+                <a href="#fitur" class="hover:text-white transition">Fitur Utama</a>
+                <a href="#showcase" class="hover:text-white transition">Live Showcase</a>
+                <a href="#komparasi" class="hover:text-white transition">Matriks Komparasi</a>
+                <a href="../flow.html" class="text-emerald-400 font-bold flex items-center gap-1.5 hover:text-emerald-300 transition">
+                    <i data-lucide="git-branch" class="size-3.5"></i>
+                    <span>Diagram Alur (Flow)</span>
+                </a>
+                <a href="index.html" class="hover:text-white transition">Semua Prototype</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <a href="login.html" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-neutral-300 hover:text-white hover:bg-[#161c36] transition">
+                    Masuk
+                </a>
+                <a href="dashboard.html" class="px-4 py-2 rounded-xl bg-white text-black font-bold text-xs hover:bg-neutral-200 transition shadow-md active:scale-95 flex items-center gap-1.5">
+                    <span>Buka Workspace</span>
+                    <i data-lucide="arrow-right" class="size-3.5"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-16 text-center relative z-10">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#161c36] border border-[#222d56] text-neutral-300 text-xs font-mono mb-8 shadow-inner">
+            <span class="size-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span class="font-semibold text-white">Gemini 2.5 Flash</span>
+            <span class="text-neutral-500">•</span>
+            <span class="text-neutral-400">Pembedah Struktur PDF &amp; Sintesis Komparatif</span>
+        </div>
+        
+        <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.15]">
+            Evaluasi Kualitatif Naskah, Tanya Jawab, &amp; <span class="bg-gradient-to-r from-emerald-400 via-sky-400 to-indigo-400 bg-clip-text text-transparent">Komparasi Makalah AI</span>
+        </h1>
+        
+        <p class="mt-6 text-sm sm:text-base text-neutral-400 max-w-2xl mx-auto leading-relaxed">
+            Platform komputasi akademis terpadu untuk mengekstrak naskah PDF secara hierarkis, menilai kelayakan 5 dimensi ilmiah, serta menyintesis 2 sampai 4 makalah secara berdampingan.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3.5">
+            <a href="dashboard.html" class="px-6 py-3 rounded-2xl bg-white text-black font-bold text-xs sm:text-sm hover:bg-neutral-200 transition flex items-center gap-2 shadow-xl shadow-white/10 active:scale-95">
+                <span>Masuk ke Dashboard Riset</span>
+                <i data-lucide="arrow-right" class="size-4"></i>
+            </a>
+            <a href="compare.html" class="px-6 py-3 rounded-2xl bg-[#161c36] border border-[#222d56] hover:border-neutral-500 text-white font-semibold text-xs sm:text-sm hover:bg-[#222d56] transition flex items-center gap-2 shadow-sm">
+                <i data-lucide="git-compare" class="size-4 text-sky-400"></i>
+                <span>Coba Komparasi Multi-Paper</span>
+            </a>
+            <a href="../flow.html" class="px-5 py-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 font-bold text-xs sm:text-sm transition flex items-center gap-2">
+                <i data-lucide="git-branch" class="size-4"></i>
+                <span>Lihat Diagram Alur</span>
+            </a>
+        </div>
+
+        <!-- KEY STATS STRIP -->
+        <div class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto">
+            <div class="p-4 rounded-2xl bg-[#11162b]/80 border border-[#222d56] text-center">
+                <div class="text-2xl font-extrabold text-white font-mono">99.4%</div>
+                <div class="text-xs text-neutral-400 mt-0.5">Akurasi Ekstraksi Teks</div>
+            </div>
+            <div class="p-4 rounded-2xl bg-[#11162b]/80 border border-[#222d56] text-center">
+                <div class="text-2xl font-extrabold text-indigo-400 font-mono">&lt; 3 Detik</div>
+                <div class="text-xs text-neutral-400 mt-0.5">Kecepatan Respons AI</div>
+            </div>
+            <div class="p-4 rounded-2xl bg-[#11162b]/80 border border-[#222d56] text-center">
+                <div class="text-2xl font-extrabold text-sky-400 font-mono">5 Dimensi</div>
+                <div class="text-xs text-neutral-400 mt-0.5">Evaluasi Ilmiah Holistik</div>
+            </div>
+            <div class="p-4 rounded-2xl bg-[#11162b]/80 border border-[#222d56] text-center">
+                <div class="text-2xl font-extrabold text-amber-400 font-mono">100% Sitasi</div>
+                <div class="text-xs text-neutral-400 mt-0.5">Traceable ke Halaman Asli</div>
+            </div>
+        </div>
+
+        <!-- LIVE INTERACTIVE SHOWCASE MOCKUP -->
+        <div id="showcase" class="mt-16 rounded-3xl border border-[#222d56] bg-[#11162b] p-5 sm:p-7 glow-indigo text-left shadow-2xl relative">
+            
+            <!-- Window Titlebar & Mode Switcher Tabs -->
+            <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#222d56]">
+                <div class="flex items-center gap-2">
+                    <span class="size-3 rounded-full bg-rose-500/80"></span>
+                    <span class="size-3 rounded-full bg-amber-500/80"></span>
+                    <span class="size-3 rounded-full bg-emerald-500/80"></span>
+                    <span class="ml-3 font-mono text-neutral-400 text-xs font-semibold flex items-center gap-1.5">
+                        <i data-lucide="cpu" class="size-3.5 text-emerald-400"></i>
+                        disputatio-evaluator v2.5
+                    </span>
+                </div>
+
+                <!-- Showcase Tabs -->
+                <div class="flex items-center p-1 rounded-xl bg-[#161c36] border border-[#222d56] text-xs">
+                    <button onclick="setTab('scoring')" id="tabScoring" class="px-3 py-1.5 rounded-lg font-bold bg-white text-black shadow-sm transition">
+                        📊 Evaluasi 5 Dimensi
+                    </button>
+                    <button onclick="setTab('qa')" id="tabQa" class="px-3 py-1.5 rounded-lg font-semibold text-neutral-400 hover:text-white transition">
+                        💬 Asisten Q&amp;A Cerdas
+                    </button>
+                    <button onclick="setTab('matrix')" id="tabMatrix" class="px-3 py-1.5 rounded-lg font-semibold text-neutral-400 hover:text-white transition">
+                        ⚖️ Matriks Komparasi
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT 1: SCORING EVALUATOR -->
+            <div id="contentScoring" class="pt-6 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-[#161c36] border border-[#222d56]">
+                    <div>
+                        <span class="text-[10px] font-mono uppercase text-neutral-400 font-bold tracking-wider">Naskah Terbuka:</span>
+                        <h2 class="text-sm sm:text-base font-bold text-white">Analisis Morfometrik Ikan Air Tawar Endemik Sundaland</h2>
+                        <span class="text-xs text-neutral-400 font-mono">Penulis: Dr. Rian Pratama, M.Si • Jurnal Biologi Tropika 2026</span>
+                    </div>
+                    <div class="text-right sm:border-l sm:border-[#222d56] sm:pl-6">
+                        <div class="text-xs text-neutral-400 font-mono">Skor Total Kelayakan</div>
+                        <div class="text-3xl font-extrabold text-indigo-400 font-mono">88.4 <span class="text-xs text-neutral-400 font-normal">/ 100</span></div>
+                    </div>
+                </div>
+
+                <!-- 5 Dimension Bars Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+                    <div class="p-4 rounded-2xl bg-[#161c36] border border-[#222d56] space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-neutral-400">Metodologi</span>
+                            <span class="font-bold font-mono text-emerald-400">92/100</span>
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-neutral-800 overflow-hidden">
+                            <div class="h-full rounded-full bg-emerald-400" style="width: 92%"></div>
+                        </div>
+                        <p class="text-[11px] text-neutral-400 pt-1">Desain eksperimen kuantitatif sangat kuat dan replicable.</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-[#161c36] border border-[#222d56] space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-neutral-400">Kebaruan (Novelty)</span>
+                            <span class="font-bold font-mono text-sky-400">86/100</span>
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-neutral-800 overflow-hidden">
+                            <div class="h-full rounded-full bg-sky-400" style="width: 86%"></div>
+                        </div>
+                        <p class="text-[11px] text-neutral-400 pt-1">Kombinasi data morfometrik &amp; uji filogenetik baru.</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-[#161c36] border border-[#222d56] space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-neutral-400">Kejelasan Narasi</span>
+                            <span class="font-bold font-mono text-purple-400">90/100</span>
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-neutral-800 overflow-hidden">
+                            <div class="h-full rounded-full bg-purple-400" style="width: 90%"></div>
+                        </div>
+                        <p class="text-[11px] text-neutral-400 pt-1">Struktur argumen dan transisi antar bab mengalir runtut.</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-[#161c36] border border-[#222d56] space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-neutral-400">Kualitas Sitasi</span>
+                            <span class="font-bold font-mono text-amber-400">84/100</span>
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-neutral-800 overflow-hidden">
+                            <div class="h-full rounded-full bg-amber-400" style="width: 84%"></div>
+                        </div>
+                        <p class="text-[11px] text-neutral-400 pt-1">82% rujukan primer terbitan 5 tahun terakhir.</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-[#161c36] border border-[#222d56] space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-neutral-400">Dampak Riset</span>
+                            <span class="font-bold font-mono text-emerald-400">90/100</span>
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-neutral-800 overflow-hidden">
+                            <div class="h-full rounded-full bg-emerald-400" style="width: 90%"></div>
+                        </div>
+                        <p class="text-[11px] text-neutral-400 pt-1">Signifikan untuk kebijakan konservasi biodiversitas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT 2: LIVE Q&A SIMULATOR -->
+            <div id="contentQa" class="pt-6 space-y-4 hidden">
+                <div class="p-4 rounded-2xl bg-[#161c36] border border-[#222d56] space-y-3">
+                    <div class="flex items-center justify-between text-xs text-neutral-400">
+                        <span class="font-mono text-emerald-400 flex items-center gap-1.5">
+                            <i data-lucide="bot" class="size-3.5"></i>
+                            Asisten AI Riset Terhubung (Contextual Memory Active)
+                        </span>
+                        <span class="font-mono text-neutral-500">Paper ID #3819</span>
+                    </div>
+
+                    <div class="space-y-3 pt-2">
+                        <!-- User Prompt -->
+                        <div class="p-3.5 rounded-xl bg-[#222d56]/60 border border-[#323f74]/40 text-xs text-white flex items-start gap-2.5">
+                            <div class="size-6 rounded-lg bg-white text-black font-bold flex items-center justify-center shrink-0 text-[10px]">U</div>
+                            <div>
+                                <div class="font-bold text-neutral-300">Pertanyaan Peneliti:</div>
+                                <div class="text-neutral-100 mt-0.5">"Apa metodologi dan dataset utama yang digunakan dalam eksperimen ini?"</div>
+                            </div>
+                        </div>
+
+                        <!-- AI Response with Citation Evidence -->
+                        <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs space-y-2">
+                            <div class="flex items-center gap-2 text-emerald-400 font-bold">
+                                <i data-lucide="sparkles" class="size-3.5"></i>
+                                <span>Jawaban Analisis Gemini AI:</span>
+                            </div>
+                            <p class="text-neutral-200 leading-relaxed">
+                                Penelitian mengadopsi pendekatan kuantitatif morfometrik dengan dataset 120 sampel terverifikasi dari 4 sentra konservasi, memetakan 18 variabel fenotipik dan diuji menggunakan analisis multivariat ANOVA (p &lt; 0.01).
+                            </p>
+                            <div class="p-2.5 rounded-lg bg-[#161c36] border border-[#222d56] flex items-center gap-2 text-[11px] text-neutral-400 font-mono">
+                                <i data-lucide="book-open" class="size-3.5 text-emerald-400 shrink-0"></i>
+                                <span>Sitasi Bukti: Naskah Bab 3 Halaman 4, Paragraf 2 (Akurasi Klasifikasi 96.4%).</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT 3: COMPARISON MATRIX -->
+            <div id="contentMatrix" class="pt-6 space-y-4 hidden">
+                <div class="overflow-x-auto rounded-2xl border border-[#222d56]">
+                    <table class="w-full text-xs text-left">
+                        <thead class="bg-[#161c36] text-neutral-400 border-b border-[#222d56] font-mono">
+                            <tr>
+                                <th class="p-3.5">Dimensi Perbandingan</th>
+                                <th class="p-3.5 text-white">Paper A (Morfometrik Endemik)</th>
+                                <th class="p-3.5 text-white">Paper B (Filogenetik Molekuler)</th>
+                                <th class="p-3.5 text-emerald-400">Kesimpulan Sintesis AI</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#222d56]/60 bg-[#11162b] text-neutral-300">
+                            <tr>
+                                <td class="p-3.5 font-bold text-neutral-400">Metodologi Riset</td>
+                                <td class="p-3.5">Morfometrik Kuantitatif (18 parameter)</td>
+                                <td class="p-3.5">Sekuens DNA Mitokondria COI</td>
+                                <td class="p-3.5 text-emerald-400 font-medium">Saling melengkapi (Morfologi + Genetik)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold text-neutral-400">Ukuran Sampel</td>
+                                <td class="p-3.5">120 Spesimen Liar</td>
+                                <td class="p-3.5">85 Sampel Jaringan</td>
+                                <td class="p-3.5 text-neutral-300">Representatif untuk populasi pulau</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold text-neutral-400">Cosine Similarity</td>
+                                <td colspan="2" class="p-3.5 text-center font-mono font-bold text-sky-400">
+                                    84.6% Kesamaan Topik &amp; Ruang Lingkup
+                                </td>
+                                <td class="p-3.5 text-emerald-400 font-bold">Korelasi Riset Sangat Tinggi</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- KEY FEATURES SECTION -->
+    <section id="fitur" class="max-w-6xl mx-auto px-4 sm:px-6 py-20 border-t border-[#222d56]/60 space-y-12">
+        <div class="text-center space-y-3 max-w-2xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 text-xs font-mono">
+                <i data-lucide="layers" class="size-3.5"></i>
+                <span>Kemampuan Inti Platform</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Semua Alat Analitik Riset dalam Satu Ekosistem</h2>
+            <p class="text-xs sm:text-sm text-neutral-400">Dirancang khusus untuk peneliti, dosen, mitra bestari, dan mahasiswa pascasarjana.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="p-6 rounded-3xl bg-[#11162b] border border-[#222d56] hover:border-emerald-500/50 transition-all space-y-3 group">
+                <div class="size-11 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i data-lucide="file-text" class="size-5"></i>
+                </div>
+                <h3 class="text-base font-bold text-white">Ekstraksi PDF Nir-Kehilangan</h3>
+                <p class="text-xs text-neutral-400 leading-relaxed">Parsing hierarkis membedah latar belakang, metode, persamaan formula, tabel hasil, dan sitasi bibtex.</p>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-[#11162b] border border-[#222d56] hover:border-sky-500/50 transition-all space-y-3 group">
+                <div class="size-11 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i data-lucide="scale" class="size-5"></i>
+                </div>
+                <h3 class="text-base font-bold text-white">Komparasi Matriks Multi-Paper</h3>
+                <p class="text-xs text-neutral-400 leading-relaxed">Bandingkan 2 sampai 4 makalah secara side-by-side untuk mengidentifikasi celah riset dan kesamaan metodologi.</p>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-[#11162b] border border-[#222d56] hover:border-purple-500/50 transition-all space-y-3 group">
+                <div class="size-11 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i data-lucide="shield-check" class="size-5"></i>
+                </div>
+                <h3 class="text-base font-bold text-white">Keamanan &amp; Audit SHA-256</h3>
+                <p class="text-xs text-neutral-400 leading-relaxed">Setiap aktivitas analisis naskah tercatat secara kriptografis dalam log audit lengkap untuk kepatuhan etika riset.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-[#222d56] bg-[#11162b] py-10 text-xs text-neutral-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="size-7 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-white font-extrabold shadow-md shadow-indigo-500/20 flex items-center justify-center text-xs">D</div>
+                <span class="font-bold text-white">Disputatio Platform</span>
+                <span class="text-neutral-500">• © 2026 Disputatio AI</span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-4 text-neutral-400">
+                <a href="../flow.html" class="text-emerald-400 font-bold hover:underline">Diagram Alur (Flow)</a>
+                <a href="dashboard.html" class="hover:text-white transition">Dashboard</a>
+                <a href="papers.html" class="hover:text-white transition">Makalah</a>
+                <a href="compare.html" class="hover:text-white transition">Komparasi</a>
+                <a href="ai-jobs.html" class="hover:text-white transition">Job AI</a>
+                <a href="audit-logs.html" class="hover:text-white transition">Audit</a>
+                <a href="index.html" class="hover:text-white transition font-semibold">Semua Prototipe</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        function setTab(tab) {
+            const tabs = ['scoring', 'qa', 'matrix'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+                const content = document.getElementById('content' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (t === tab) {
+                    btn.className = "px-3 py-1.5 rounded-lg font-bold bg-white text-black shadow-sm transition";
+                    content.classList.remove('hidden');
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-lg font-semibold text-neutral-400 hover:text-white transition";
+                    content.classList.add('hidden');
+                }
+            });
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
